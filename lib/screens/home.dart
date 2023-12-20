@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/service/weatherService.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,49 +11,246 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    WeatherService weatherService = WeatherService();
+    weatherService.getCurrentConditions();
+    print("SONUÇX : ${weatherService.getCurrentConditions()}");
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.blue,
-          body: Column(
-            children: [
-              Container(
-                child: const Row(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text("+"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => {},
                       ),
                     ),
                     Expanded(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("City Name"),
+                          const Text("City Name"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("o"),
-                              SizedBox(width: 7),
-                              Text("o"),
-                              SizedBox(width: 7),
-                              Text("o"),
+                              IconButton(
+                                icon: const Icon(Icons.circle_outlined),
+                                onPressed: () => {},
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.circle_outlined),
+                                onPressed: () => {},
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.circle_outlined),
+                                onPressed: () => {},
+                              ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Text("Three Dots"),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        onPressed: () => {},
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                const Text("Tessst"),
+
+                const Image(
+                  image: AssetImage("lib/assets/images/snow.png"),
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Sunday"),
+                    SizedBox(width: 10),
+                    Text("Nov 14"),
+                  ],
+                ),
+                const Text("24 degree"),
+                const Text("Heavy Rain"),
+                const Text("Line"),
+                // TODO Solve Repetition
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Text("Image"),
+                        Column(
+                          children: [
+                            Text("Value"),
+                            Text("Title"),
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Image"),
+                        Column(
+                          children: [
+                            Text("Value"),
+                            Text("Title"),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Text("Image"),
+                        Column(
+                          children: [
+                            Text("Value"),
+                            Text("Title"),
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Image"),
+                        Column(
+                          children: [
+                            Text("Value"),
+                            Text("Title"),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: [
+                      Text("Sunday"),
+                      SizedBox(width: 5),
+                      Text("|"),
+                      SizedBox(width: 5),
+                      Text("Nov 14"),
+                    ],
+                  ),
+                ),
+                const Row(
+                  // TODO Solve Repetition
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Text("Now"),
+                        Text("Image"),
+                        Text("20/24 degree"),
+                        Text("74% rain"),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text("Now"),
+                        Text("Image"),
+                        Text("20/24 degree"),
+                        Text("74% rain"),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text("Now"),
+                        Text("Image"),
+                        Text("20/24 degree"),
+                        Text("74% rain"),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text("Now"),
+                        Text("Image"),
+                        Text("20/24 degree"),
+                        Text("74% rain"),
+                      ],
+                    ),
+                  ],
+                ),
+                const Text("Forcats for 7 Days"),
+                // TODO Solve Repetition
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Sun"),
+                    Text("Img / value"),
+                    Text("Degrees"),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
