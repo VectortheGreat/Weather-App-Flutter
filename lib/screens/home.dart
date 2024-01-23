@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/service/weatherService.dart';
+import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/service/weather_service.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,12 +11,44 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final String currentMonth = DateFormat.MMMd().format(DateTime.now());
+  final String currentDayName = DateFormat.E().format(DateTime.now());
+  final String currentDay = DateFormat.d().format(DateTime.now());
+
+  //api key
+  final _weatherService = WeatherService('5a12f4483ea94040b4a566bd2eccd2a8');
+  Weather? _weather;
+
+  //fetch weather
+  _fetchWeather() async {
+    //get current city
+    // String cityName = await _weatherService.getCurrentCity();
+    String cityName = "kayseri";
+    //get weather for city
+    try {
+      final weather = await _weatherService.getWeather(cityName);
+      setState(() {
+        _weather = weather;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //initstate
+  @override
+  void initState() {
+    super.initState();
+    // fetch weather on startup
+    _fetchWeather();
+  }
+
   @override
   Widget build(BuildContext context) {
-    WeatherService weatherService = WeatherService();
-    weatherService.getCurrentConditions();
-    print("SONUÇX : ${weatherService.getCurrentConditions()}");
+    // print("TARİH: ${formattedDate}");
+    print(_weather?.weatherDataList[0].dt_txt.split(" ")[1].substring(0, 5));
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.blue,
@@ -36,7 +70,7 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text("City Name"),
+                          Text(_weather?.cityName ?? "loading city.."),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -66,7 +100,10 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                const Text("Tessst"),
+                Text(_weather?.weatherDataList[1].temperature.toString() ??
+                    "loading temperature.."),
+                Text(_weather?.weatherDataList[1].mainCondition.toString() ??
+                    "loading temperature.."),
 
                 const Image(
                   image: AssetImage("lib/assets/images/snow.png"),
@@ -75,19 +112,21 @@ class _HomeState extends State<Home> {
                   fit: BoxFit.cover,
                 ),
 
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Sunday"),
+                    Text(currentDayName),
                     SizedBox(width: 10),
-                    Text("Nov 14"),
+                    Text(currentMonth),
                   ],
                 ),
-                const Text("24 degree"),
-                const Text("Heavy Rain"),
-                const Text("Line"),
+                Text("${_weather?.weatherDataList[0].temperature.toString()}°"),
+                Text(
+                    "${_weather?.weatherDataList[0].mainCondition.toString()}"),
+                const Text(
+                    "------------------------------------------------------------------------------"),
                 // TODO Solve Repetition
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
@@ -95,8 +134,9 @@ class _HomeState extends State<Home> {
                         Text("Image"),
                         Column(
                           children: [
-                            Text("Value"),
-                            Text("Title"),
+                            Text(
+                                "${_weather?.weatherDataList[0].wind.toString()} km/h"),
+                            Text("Wind"),
                           ],
                         )
                       ],
@@ -106,15 +146,16 @@ class _HomeState extends State<Home> {
                         Text("Image"),
                         Column(
                           children: [
-                            Text("Value"),
-                            Text("Title"),
+                            Text(
+                                "${_weather?.weatherDataList[0].rain.toString()} %"),
+                            Text("Chance Rain"),
                           ],
                         )
                       ],
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
@@ -122,8 +163,9 @@ class _HomeState extends State<Home> {
                         Text("Image"),
                         Column(
                           children: [
-                            Text("Value"),
-                            Text("Title"),
+                            Text(
+                                "${_weather?.weatherDataList[0].pressure.toString()} mbar"),
+                            Text("Pressure"),
                           ],
                         )
                       ],
@@ -133,60 +175,81 @@ class _HomeState extends State<Home> {
                         Text("Image"),
                         Column(
                           children: [
-                            Text("Value"),
-                            Text("Title"),
+                            Text(
+                                "${_weather?.weatherDataList[0].humidity.toString()} %"),
+                            Text("Humidity"),
                           ],
                         )
                       ],
                     ),
                   ],
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Row(
                     children: [
-                      Text("Sunday"),
+                      Text(currentDayName),
                       SizedBox(width: 5),
                       Text("|"),
                       SizedBox(width: 5),
-                      Text("Nov 14"),
+                      Text(currentDay),
                     ],
                   ),
                 ),
-                const Row(
+                Row(
                   // TODO Solve Repetition
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
-                        Text("Now"),
+                        Text(_weather?.weatherDataList[0].dt_txt
+                                .split(" ")[1]
+                                .substring(0, 5)
+                                .toString() ??
+                            "loading"),
                         Text("Image"),
-                        Text("20/24 degree"),
-                        Text("74% rain"),
+                        Text(
+                            "${_weather?.weatherDataList[0].temp_min}° / ${_weather?.weatherDataList[0].temp_max}°"),
+                        Text("${_weather?.weatherDataList[0].rain}% rain"),
                       ],
                     ),
                     Column(
                       children: [
-                        Text("Now"),
+                        Text(_weather?.weatherDataList[1].dt_txt
+                                .split(" ")[1]
+                                .substring(0, 5)
+                                .toString() ??
+                            "loading"),
                         Text("Image"),
-                        Text("20/24 degree"),
-                        Text("74% rain"),
+                        Text(
+                            "${_weather?.weatherDataList[1].temp_min}° / ${_weather?.weatherDataList[1].temp_max}°"),
+                        Text("${_weather?.weatherDataList[1].rain}% rain"),
                       ],
                     ),
                     Column(
                       children: [
-                        Text("Now"),
+                        Text(_weather?.weatherDataList[2].dt_txt
+                                .split(" ")[1]
+                                .substring(0, 5)
+                                .toString() ??
+                            "loading"),
                         Text("Image"),
-                        Text("20/24 degree"),
-                        Text("74% rain"),
+                        Text(
+                            "${_weather?.weatherDataList[2].temp_min}° / ${_weather?.weatherDataList[2].temp_max}°"),
+                        Text("${_weather?.weatherDataList[2].rain}% rain"),
                       ],
                     ),
                     Column(
                       children: [
-                        Text("Now"),
+                        Text(_weather?.weatherDataList[3].dt_txt
+                                .split(" ")[1]
+                                .substring(0, 5)
+                                .toString() ??
+                            "loading"),
                         Text("Image"),
-                        Text("20/24 degree"),
-                        Text("74% rain"),
+                        Text(
+                            "${_weather?.weatherDataList[3].temp_min}° / ${_weather?.weatherDataList[3].temp_max}°"),
+                        Text("${_weather?.weatherDataList[3].rain}% rain"),
                       ],
                     ),
                   ],
