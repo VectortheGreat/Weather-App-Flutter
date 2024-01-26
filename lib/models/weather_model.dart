@@ -1,22 +1,3 @@
-// class Weather {
-//   final String cityName;
-//   final double temperature;
-//   final String mainCondition;
-
-//   Weather({
-//     required this.cityName,
-//     required this.temperature,
-//     required this.mainCondition,
-//   });
-
-//   factory Weather.fromJson(Map<String, dynamic> json) {
-//     return Weather(
-//         cityName: json['city']['name'],
-//         temperature: json['list'][0]['main']['temp'].toDouble(),
-//         mainCondition: json['list'][0]['weather'][0]['main']);
-//   }
-// }
-
 class Weather {
   final String cityName;
   final List<WeatherData> weatherDataList;
@@ -48,8 +29,10 @@ class WeatherData {
   final int humidity;
   final int pressure;
   final String mainCondition;
+  final String icon;
   final double wind;
   final double rain;
+  final double pop;
   final String dt_txt;
 
   WeatherData({
@@ -59,8 +42,10 @@ class WeatherData {
     required this.humidity,
     required this.pressure,
     required this.mainCondition,
+    required this.icon,
     required this.wind,
     required this.rain,
+    required this.pop,
     required this.dt_txt,
   });
 
@@ -72,8 +57,10 @@ class WeatherData {
       humidity: json['main']['humidity'],
       pressure: json['main']['pressure'],
       mainCondition: json['weather'][0]['main'],
+      icon: json['weather'][0]['icon'],
       wind: json['wind']['speed'].toDouble(),
       rain: json['rain'] == null ? 0.0 : json['rain']['3h'].toDouble(),
+      pop: json['pop'].toDouble() * 100,
       dt_txt: json['dt_txt'],
     );
   }
