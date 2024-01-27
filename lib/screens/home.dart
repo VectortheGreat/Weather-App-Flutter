@@ -19,6 +19,7 @@ class _HomeState extends State<Home> {
   final String currentMonth = DateFormat.MMMd().format(DateTime.now());
   final String currentDayName = DateFormat.E().format(DateTime.now());
   final String currentDay = DateFormat.d().format(DateTime.now());
+  bool forecastsDays = false;
 
   //api key
   final _weatherService = WeatherService('5a12f4483ea94040b4a566bd2eccd2a8');
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
   _fetchWeather() async {
     //get current city
     // String cityName = await _weatherService.getCurrentCity();
-    String cityName = "ankara";
+    String cityName = "malang";
     //get weather for city
     try {
       final weather = await _weatherService.getWeather(cityName);
@@ -44,60 +45,54 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _fetchWeather();
+    // _fetchWeather();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.blue,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              NavbarComp(weather: _weather),
-              CurrentWeatherComp(
-                  weather: _weather,
-                  currentDayName: currentDayName,
-                  currentMonth: currentMonth),
-              const Text(
-                  "------------------------------------------------------------------------------"),
-              Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  WeatherConditionsComp(
-                    weather: _weather,
-                  ),
-                  HourlyWeatherComp(
-                      weather: _weather,
-                      currentDayName: currentDayName,
-                      currentDay: currentDay),
-                ],
-              )),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 60,
-                      alignment: Alignment.center,
-                      color: Colors.white,
-                      child: const Text(
+    print(forecastsDays);
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CurrentWeatherComp(
+                weather: _weather,
+                currentDayName: currentDayName,
+                currentMonth: currentMonth),
+            HourlyWeatherComp(weather: _weather, currentDay: currentDay),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 60,
+                    alignment: Alignment.center,
+                    color: Colors.white,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          forecastsDays = !forecastsDays;
+                        });
+                      },
+                      child: Text(
                         "Forcasts for 5 Days",
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          color: forecastsDays == false
+                              ? Colors.blue
+                              : Colors.grey,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              //ForecastWeatherComp(weather: _weather),
-            ],
-          ),
+                ),
+              ],
+            ),
+            forecastsDays
+                ? ForecastWeatherComp(weather: _weather)
+                : Container(),
+          ],
         ),
       ),
     );

@@ -11,23 +11,33 @@ class WeatherConditionsComp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle whiteTextStyle = const TextStyle(
+      color: Colors.white,
+    );
     Widget weatherInfo(String label, String value) {
       return Row(
         children: [
+          const SizedBox(
+            width: 20,
+          ),
           Image(
-              image: AssetImage(label == "Wind"
-                  ? "lib/assets/images/wind.png"
-                  : label == "Chance Rain"
-                      ? "lib/assets/images/rain.png"
-                      : label == "Pressure"
-                          ? "lib/assets/images/pressure.png"
-                          : label == "Humidity"
-                              ? "lib/assets/images/humidity.png"
-                              : "lib/assets/wind.png")),
+            image: AssetImage(label == "Wind"
+                ? "lib/assets/images/wind.png"
+                : label == "Chance Rain"
+                    ? "lib/assets/images/rain.png"
+                    : label == "Pressure"
+                        ? "lib/assets/images/pressure.png"
+                        : label == "Humidity"
+                            ? "lib/assets/images/humidity.png"
+                            : "lib/assets/wind.png"),
+            height: 50,
+            width: 50,
+          ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(value),
-              Text(label),
+              Text(value, style: whiteTextStyle),
+              Text(label, style: whiteTextStyle),
             ],
           ),
         ],
@@ -37,21 +47,27 @@ class WeatherConditionsComp extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            weatherInfo(
-                "Wind", "${weather?.weatherDataList[0].wind.toString()} km/h"),
-            weatherInfo("Chance Rain",
-                "${weather?.weatherDataList[0].pop.toString()} %"),
+            Expanded(
+              child: weatherInfo("Wind",
+                  "${weather?.weatherDataList[0].wind.toString()} km/h"),
+            ),
+            Expanded(
+              child: weatherInfo("Chance Rain",
+                  "${weather?.weatherDataList[0].pop.toString()} %"),
+            ),
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            weatherInfo("Pressure",
-                "${weather?.weatherDataList[0].pressure.toString()} mbar"),
-            weatherInfo("Humidity",
-                "${weather?.weatherDataList[0].humidity.toString()} %"),
+            Expanded(
+              child: weatherInfo("Pressure",
+                  "${weather?.weatherDataList[0].pressure.toString()} mbar"),
+            ),
+            Expanded(
+              child: weatherInfo("Humidity",
+                  "${weather?.weatherDataList[0].humidity.toString()} %"),
+            ),
           ],
         ),
       ],
