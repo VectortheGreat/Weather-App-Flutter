@@ -24,28 +24,32 @@ class HourlyWeatherComp extends StatelessWidget {
 
     Widget weatherDataColumn(int index) {
       var weatherData = weather?.weatherDataList[index];
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-                weatherData?.dt_txt.split(" ")[1].substring(0, 5).toString() ??
-                    "loading",
-                style: whiteTextStyleBold),
-            Image.network(
-              weather?.weatherDataList?.isNotEmpty == true
-                  ? 'https://openweathermap.org/img/wn/${weather?.weatherDataList[index].icon}@2x.png'
-                  : 'https://openweathermap.org/img/wn/10d@2x.png',
-              width: 50,
-              height: 50,
-            ),
-            Text(
-                "${weatherData?.temp_min.toInt()}°/${weatherData?.temp_max.toInt()}°",
-                style: whiteTextStyle),
-            Text("${weatherData?.pop.toInt()}% rain", style: whiteTextStyle),
-          ],
-        ),
-      );
+      return weatherData != null
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    weatherData.dt_txt.split(" ")[1].substring(0, 5).toString(),
+                    style: whiteTextStyleBold,
+                  ),
+                  Image.network(
+                    weather?.weatherDataList?.isNotEmpty == true
+                        ? 'https://openweathermap.org/img/wn/${weather?.weatherDataList[index].icon}@2x.png'
+                        : 'https://openweathermap.org/img/wn/01d.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  Text(
+                    "${weatherData.temp_min.toInt()}°/${weatherData.temp_max.toInt()}°",
+                    style: whiteTextStyle,
+                  ),
+                  Text("${weatherData.pop.toInt()}% rain",
+                      style: whiteTextStyle),
+                ],
+              ),
+            )
+          : Container();
     }
 
     return Container(

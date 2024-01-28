@@ -7,12 +7,14 @@ class CurrentWeatherComp extends StatelessWidget {
   final Weather? weather;
   final String currentDayName;
   final String currentMonth;
+  final bool forecastsDays;
 
   const CurrentWeatherComp(
       {Key? key,
       required this.weather,
       required this.currentMonth,
-      required this.currentDayName})
+      required this.currentDayName,
+      required this.forecastsDays})
       : super(key: key);
 
   @override
@@ -32,60 +34,129 @@ class CurrentWeatherComp extends StatelessWidget {
       fontSize: 40,
       fontWeight: FontWeight.bold,
     );
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
+
+    Widget currentWeatherContent() {
+      return Padding(
+        padding: const EdgeInsets.all(15.0),
         child: Container(
           decoration: containerDecoration,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              NavbarComp(weather: weather),
-              Image.network(
-                weather?.weatherDataList?.isNotEmpty == true
-                    ? 'https://openweathermap.org/img/wn/${weather?.weatherDataList[0].icon}@2x.png'
-                    : 'https://openweathermap.org/img/wn/10d@2x.png',
-                width: 200,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        currentDayName,
-                        style: whiteTextStyle,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Text(
-                          "|",
+          child: !forecastsDays
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NavbarComp(weather: weather),
+                    Image.network(
+                      weather?.weatherDataList?.isNotEmpty == true
+                          ? 'https://openweathermap.org/img/wn/${weather?.weatherDataList[0].icon}@2x.png'
+                          : 'https://openweathermap.org/img/wn/10d@2x.png',
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              currentDayName,
+                              style: whiteTextStyle,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5, right: 5),
+                              child: Text(
+                                "|",
+                                style: whiteTextStyle,
+                              ),
+                            ),
+                            Text(
+                              currentMonth,
+                              style: whiteTextStyle,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "${weather?.weatherDataList[0].temperature.toString()}°",
+                          style: boldWhiteTextStyle,
+                        ),
+                        Text(
+                          "${weather?.weatherDataList[0].mainCondition.toString()}",
                           style: whiteTextStyle,
                         ),
-                      ),
-                      Text(
-                        currentMonth,
-                        style: whiteTextStyle,
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "${weather?.weatherDataList[0].temperature.toString()}°",
-                    style: boldWhiteTextStyle,
-                  ),
-                  Text(
-                    "${weather?.weatherDataList[0].mainCondition.toString()}",
-                    style: whiteTextStyle,
-                  ),
-                ],
-              ),
-              WeatherConditionsComp(weather: weather),
-            ],
-          ),
+                      ],
+                    ),
+                    WeatherConditionsComp(weather: weather),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NavbarComp(weather: weather),
+                    Row(
+                      children: [
+                        Image.network(
+                          weather?.weatherDataList?.isNotEmpty == true
+                              ? 'https://openweathermap.org/img/wn/${weather?.weatherDataList[0].icon}@2x.png'
+                              : 'https://openweathermap.org/img/wn/10d@2x.png',
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  currentDayName,
+                                  style: whiteTextStyle,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  child: Text(
+                                    "|",
+                                    style: whiteTextStyle,
+                                  ),
+                                ),
+                                Text(
+                                  currentMonth,
+                                  style: whiteTextStyle,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "${weather?.weatherDataList[0].temperature.toString()}°",
+                              style: boldWhiteTextStyle,
+                            ),
+                            Text(
+                              "${weather?.weatherDataList[0].mainCondition.toString()}",
+                              style: whiteTextStyle,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    WeatherConditionsComp(weather: weather),
+                  ],
+                ),
         ),
-      ),
-    );
+      );
+    }
+
+    return !forecastsDays
+        ? Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                  decoration: containerDecoration,
+                  child: currentWeatherContent()),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+                decoration: containerDecoration,
+                child: currentWeatherContent()),
+          );
   }
 }

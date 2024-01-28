@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/components/current_weather.dart';
 import 'package:weather_app/components/forecast_weather.dart';
 import 'package:weather_app/components/hourly_weahter.dart';
-import 'package:weather_app/components/navbar.dart';
-import 'package:weather_app/components/weather_conditions.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/service/weather_service.dart';
 import 'package:intl/intl.dart';
@@ -45,55 +43,78 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // _fetchWeather();
+    _fetchWeather();
   }
 
   @override
   Widget build(BuildContext context) {
     print(forecastsDays);
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CurrentWeatherComp(
-                weather: _weather,
-                currentDayName: currentDayName,
-                currentMonth: currentMonth),
-            HourlyWeatherComp(weather: _weather, currentDay: currentDay),
-            Row(
+    Widget weatherContent() {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CurrentWeatherComp(
+              weather: _weather,
+              currentDayName: currentDayName,
+              currentMonth: currentMonth,
+              forecastsDays: forecastsDays),
+          HourlyWeatherComp(weather: _weather, currentDay: currentDay),
+          if (forecastsDays)
+            Column(
               children: [
-                Expanded(
-                  child: Container(
-                    height: 60,
-                    alignment: Alignment.center,
-                    color: Colors.white,
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          forecastsDays = !forecastsDays;
-                        });
-                      },
-                      child: Text(
-                        "Forcasts for 5 Days",
-                        style: TextStyle(
-                          color: forecastsDays == false
-                              ? Colors.blue
-                              : Colors.grey,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                const SizedBox(
+                  height: 20,
+                ),
+                ForecastWeatherComp(weather: _weather)
+              ],
+            ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 60,
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        forecastsDays = !forecastsDays;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          forecastsDays
+                              ? "Hide Forecasts"
+                              : "Forecasts for 5 Days",
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          forecastsDays ? Icons.expand_less : Icons.expand_more,
+                          color: forecastsDays ? Colors.blue : Colors.grey,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-            forecastsDays
-                ? ForecastWeatherComp(weather: _weather)
-                : Container(),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return SafeArea(
+      child: Scaffold(
+        body: !forecastsDays
+            ? weatherContent()
+            : SingleChildScrollView(child: weatherContent()),
       ),
     );
   }
