@@ -54,7 +54,7 @@ class WeatherConditionsComp extends StatelessWidget {
             ),
             Expanded(
               child: weatherInfo("Chance Rain",
-                  "${weather?.weatherDataList[0].pop.toString()} %"),
+                  "${weather?.weatherDataList[0].pop.toInt()} %"),
             ),
           ],
         ),
@@ -62,11 +62,11 @@ class WeatherConditionsComp extends StatelessWidget {
           children: [
             Expanded(
               child: weatherInfo("Pressure",
-                  "${weather?.weatherDataList[0].pressure.toString()} mbar"),
+                  "${weather?.weatherDataList[0].pressure.toInt()} mbar"),
             ),
             Expanded(
               child: weatherInfo("Humidity",
-                  "${weather?.weatherDataList[0].humidity.toString()} %"),
+                  "${weather?.weatherDataList[0].humidity.toInt()} %"),
             ),
           ],
         ),

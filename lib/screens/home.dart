@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:weather_app/components/current_weather.dart';
 import 'package:weather_app/components/forecast_weather.dart';
 import 'package:weather_app/components/hourly_weahter.dart';
+import 'package:weather_app/components/loading.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/service/weather_service.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +22,7 @@ class _HomeState extends State<Home> {
   bool forecastsDays = false;
 
   //api key
-  final _weatherService = WeatherService('5a12f4483ea94040b4a566bd2eccd2a8');
+  final _weatherService = WeatherService(dotenv.env['API_KEY']!);
   Weather? _weather;
 
   //fetch weather
@@ -110,12 +112,14 @@ class _HomeState extends State<Home> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        body: !forecastsDays
-            ? weatherContent()
-            : SingleChildScrollView(child: weatherContent()),
-      ),
-    );
+    return _weather != null
+        ? SafeArea(
+            child: Scaffold(
+              body: !forecastsDays
+                  ? weatherContent()
+                  : SingleChildScrollView(child: weatherContent()),
+            ),
+          )
+        : const LoadingComp();
   }
 }
